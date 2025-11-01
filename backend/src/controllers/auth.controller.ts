@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
-import { AuthRequest } from "@/types";
+import { prisma } from "../lib/prisma";
+import { AuthRequest } from "../types";
 
 // Validation schemas
 const registerSchema = z.object({

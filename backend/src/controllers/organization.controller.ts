@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
-import { AuthRequest, TenantRequest } from "@/types";
+import { prisma } from "../lib/prisma";
+import { AuthRequest, TenantRequest } from "../types";
 import { Role } from "@prisma/client";
 
 // Validation schemas
