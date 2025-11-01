@@ -15,6 +15,7 @@
 - [Architecture](#-architecture)
 - [Multi-Tenancy Implementation](#-multi-tenancy-implementation)
 - [Getting Started](#-getting-started)
+- [Docker Setup](#-docker-setup)
 - [Deployment](#-deployment)
 - [API Documentation](#-api-documentation)
 - [Testing](#-testing)
@@ -374,7 +375,136 @@ yarn dev --debug      # Run with debug logging
 
 ---
 
-## 📦 Deployment
+## � Docker Setup
+
+### Quick Start with Docker Compose
+
+The easiest way to run TaskFlow locally is using Docker and Docker Compose. Everything is containerized and ready to go!
+
+#### Prerequisites
+- Docker and Docker Compose installed ([Install Docker](https://docs.docker.com/get-docker/))
+- 4GB RAM minimum recommended
+
+#### Start the Application
+
+```bash
+# Clone and navigate to project
+git clone https://github.com/devdiop221/taskflow.git
+cd taskflow
+
+# Copy environment variables (optional, defaults provided)
+cp .env.example .env
+
+# Build and start services
+docker-compose up --build
+
+# First time setup: run migrations
+docker-compose exec backend yarn prisma:migrate
+docker-compose exec backend yarn db:seed
+```
+
+The application will be available at:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+- **API Documentation**: http://localhost:5000/api-docs
+- **Database**: postgresql://taskflow:taskflow_dev@localhost:5432/taskflow
+
+#### Using Makefile Commands
+
+```bash
+# View all available commands
+make help
+
+# Start services
+make up
+
+# View logs
+make logs
+
+# Run database migrations
+make migrate
+
+# Seed database with test data
+make seed
+
+# Stop services
+make down
+
+# Check service health
+make health
+
+# Open database shell
+make shell-db
+
+# Clean up everything
+make clean
+```
+
+#### Docker Services
+
+The `docker-compose.yml` includes three main services:
+
+1. **PostgreSQL Database** (`taskflow-postgres`)
+   - Port: 5432
+   - Auto-creates database and user
+   - Data persists in `postgres_data` volume
+
+2. **Backend API** (`taskflow-backend`)
+   - Node.js 20 Alpine with Express
+   - Port: 5000
+   - Hot-reload enabled for development
+   - Health checks configured
+
+3. **Frontend** (`taskflow-frontend`)
+   - Nginx Alpine serving React SPA
+   - Port: 3000
+   - Automatic SPA routing configured
+   - Gzip compression enabled
+
+#### Environment Configuration
+
+Edit `.env` to customize settings:
+
+```env
+# Database
+DB_USER=taskflow
+DB_PASSWORD=taskflow_dev
+DB_NAME=taskflow
+
+# Backend
+NODE_ENV=development
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=7d
+
+# Frontend
+VITE_API_URL=http://localhost:5000/api
+```
+
+#### Troubleshooting Docker
+
+```bash
+# View logs
+docker-compose logs -f backend
+
+# Access container shell
+docker-compose exec backend sh
+
+# Restart a service
+docker-compose restart backend
+
+# Remove and recreate containers
+docker-compose down -v
+docker-compose up --build
+
+# Check service health
+docker-compose ps
+```
+
+For detailed Docker documentation, see [DOCKER.md](./DOCKER.md)
+
+---
+
+## �📦 Deployment
 
 ### Frontend Deployment (Vercel)
 
