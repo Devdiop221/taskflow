@@ -4,23 +4,7 @@
 
 **TaskFlow** is a professional-grade, multi-tenant project management application built with modern web technologies. It enables teams to manage projects and tasks within isolated organizational workspaces, similar to GitHub's organization model.
 
-## 🚀 Live Demo
 
-**Frontend:** [https://taskflow-app.vercel.app](https://taskflow-app.vercel.app)
-**API:** [https://taskflow-api.railway.app](https://taskflow-api.railway.app)
-**API Documentation:** [Swagger Docs](https://taskflow-api.railway.app/docs)
-
-### Test Accounts
-
-```
-Owner Account:
-Email: john.doe@example.com
-Password: Test1234!
-
-Member Account:
-Email: jane.smith@example.com
-Password: Test1234!
-```
 
 ---
 
@@ -229,7 +213,7 @@ const task = await prisma.task.create({
 #### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/taskflow.git
+git clone https://github.com/devdiop221/taskflow.git
 cd taskflow
 ```
 
@@ -244,7 +228,7 @@ Create `.env` file:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/taskflow"
-PORT=5000
+PORT=8000
 NODE_ENV=development
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
 JWT_EXPIRES_IN="7d"
@@ -270,7 +254,7 @@ Start server:
 npm run dev
 ```
 
-Server runs on `http://localhost:5000`
+Server runs on `http://localhost:8000`
 
 #### 3. Frontend Setup
 
@@ -282,7 +266,7 @@ npm install
 Create `.env` file:
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:8000/api
 ```
 
 Start development server:
@@ -483,17 +467,8 @@ cd frontend
 npm test
 ```
 
-### Test Coverage
 
-```bash
-npm test -- --coverage
-```
 
-### E2E Tests (Planned)
-
-```bash
-npm run test:e2e
-```
 
 ---
 
@@ -570,7 +545,7 @@ This project is licensed under the MIT License.
 
 ## 👥 Authors
 
-- **Mouhamed Diop** - Initial work - [GitHub](https://github.com/yourusername)
+- **Mouhamed Diop**
 
 ---
 
