@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { z } from "zod";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib";
 import { TenantRequest } from "../types";
 import { TaskStatus, TaskPriority } from "@prisma/client";
 

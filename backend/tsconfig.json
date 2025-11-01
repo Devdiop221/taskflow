@@ -11,6 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
+    "baseUrl": "./src",  // Ajoutez ceci
+    "paths": {           // Et ceci
+      "*": ["*"],
+      "lib/*": ["lib/*"]
+    },
     "ignoreDeprecations": "5.0",
     "declaration": true,
     "declarationMap": true,
