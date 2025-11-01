@@ -221,68 +221,156 @@ cd taskflow
 
 ```bash
 cd backend
-npm install
+yarn install  # or npm install
 ```
 
-Create `.env` file:
+Create `.env` file in the `backend` directory:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/taskflow"
-PORT=8000
+PORT=5000
 NODE_ENV=development
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
 JWT_EXPIRES_IN="7d"
 CORS_ORIGIN="http://localhost:5173"
 ```
 
-Run migrations:
+Setup database and run migrations:
 
 ```bash
-npx prisma migrate dev
-npx prisma generate
+# Generate Prisma Client
+yarn prisma:generate
+
+# Run migrations
+yarn prisma:migrate
+
+# Seed database with test data (optional)
+yarn db:seed
+
+# Open Prisma Studio to view/manage data (optional)
+yarn prisma:studio
 ```
 
-Seed database (optional):
+Build and start the backend:
 
 ```bash
-npx prisma db seed
+# Development mode with hot reload
+yarn dev
+
+# Production build
+yarn build
+
+# Start production server
+yarn start
 ```
 
-Start server:
-
-```bash
-npm run dev
-```
-
-Server runs on `http://localhost:8000`
+Backend API runs on `http://localhost:5000`
+Swagger documentation available at `http://localhost:5000/api-docs`
 
 #### 3. Frontend Setup
 
 ```bash
 cd ../frontend
-npm install
+yarn install  # or npm install
 ```
 
-Create `.env` file:
+Create `.env` file in the `frontend` directory:
 
 ```env
-VITE_API_URL=http://localhost:8000/api
+VITE_API_URL=http://localhost:5000/api
 ```
 
 Start development server:
 
 ```bash
-npm run dev
+yarn dev
 ```
 
-App runs on `http://localhost:5173`
+Frontend runs on `http://localhost:5173`
 
-#### 4. Verify Setup
+#### 4. Quick Start Script
 
-1. Open `http://localhost:5173`
-2. Register a new account
-3. Create an organization
-4. Start creating projects and tasks!
+To simplify local development, use this script to start both frontend and backend:
+
+```bash
+# From taskflow root directory
+cd backend && yarn dev &
+cd ../frontend && yarn dev
+```
+
+Or use the individual terminals:
+
+**Terminal 1 - Backend:**
+```bash
+cd backend
+yarn dev  # Runs on http://localhost:5000
+```
+
+**Terminal 2 - Frontend:**
+```bash
+cd frontend
+yarn dev  # Runs on http://localhost:5173
+```
+
+#### 5. Test Credentials
+
+After seeding the database, use these test accounts:
+
+```
+Email: john.doe@example.com
+Password: Test1234!
+Role: Organization Owner
+
+Email: jane.smith@example.com
+Password: Test1234!
+Role: Organization Member
+```
+
+#### 6. Verify Setup
+
+1. **Backend Health Check**: Visit `http://localhost:5000/api-docs` - you should see Swagger API documentation
+2. **Frontend Launch**: Visit `http://localhost:5173` - you should see the TaskFlow login page
+3. **Test Registration**: Click "S'inscrire" to register a new account
+4. **Create Organization**: After login, create your first organization
+5. **Create Project**: Add a project and start creating tasks!
+
+### Development Commands Reference
+
+#### Backend Commands
+
+```bash
+cd backend
+
+# Development
+yarn dev              # Start dev server with hot reload
+yarn build            # Compile TypeScript to JavaScript
+yarn start            # Run compiled production build
+
+# Database
+yarn prisma:generate  # Generate Prisma Client
+yarn prisma:migrate   # Run database migrations
+yarn prisma:studio    # Open Prisma Studio UI
+yarn db:seed          # Seed database with test data
+
+# Testing & Linting
+yarn test             # Run tests
+yarn docs:generate    # Generate API docs
+```
+
+#### Frontend Commands
+
+```bash
+cd frontend
+
+# Development
+yarn dev              # Start dev server with Vite HMR
+yarn build            # Build production bundle
+yarn preview          # Preview production build locally
+yarn lint             # Run ESLint
+
+# Debugging
+yarn dev --debug      # Run with debug logging
+```
 
 ---
 
@@ -306,30 +394,96 @@ App runs on `http://localhost:5173`
 
 ### Backend Deployment (Railway)
 
-1. **Create Railway Account**: [railway.app](https://railway.app)
+1. **Prerequisites**:
+   - Push your code to GitHub
+   - Railway account created at [railway.app](https://railway.app)
 
-2. **Create New Project**:
-   - Click "New Project"
-   - Select "Deploy from GitHub repo"
-   - Choose your repository
-
-3. **Add PostgreSQL**:
-   - Click "New"
-   - Select "Database" → "PostgreSQL"
-   - Railway provides `DATABASE_URL` automatically
-
-4. **Configure Backend Service**:
-   - Root directory: `backend`
-   - Build command: `npm run build`
-   - Start command: `npm start`
-
-5. **Environment Variables**:
+2. **Create New Railway Project**:
+   ```bash
+   # Via Railway CLI (recommended)
+   npm install -g @railway/cli
+   railway init
+   railway link <project-id>
    ```
-   DATABASE_URL=(auto-provided by Railway)
+
+   Or via Web Dashboard:
+   - Click "Create New Project"
+   - Select "Deploy from GitHub repo"
+   - Authorize GitHub and select `taskflow` repository
+
+3. **Add PostgreSQL Database**:
+   - In project dashboard, click "New" button
+   - Select "PostgreSQL"
+   - Railway automatically creates `DATABASE_URL` environment variable
+
+4. **Configure Build Settings**:
+   - Select the code deployment service
+   - **Root directory**: `backend`
+   - **Build command**: `yarn build`
+   - **Start command**: `yarn start`
+
+5. **Set Environment Variables**:
+   In Railway dashboard, add these variables:
+   ```env
+   DATABASE_URL=         # Auto-provided by Railway PostgreSQL
    NODE_ENV=production
-   JWT_SECRET=<generate-secure-secret>
+   PORT=5000
+   JWT_SECRET=<generate-a-secure-random-string>
    JWT_EXPIRES_IN=7d
-   CORS_ORIGIN=https://your-frontend-url.vercel.app
+   CORS_ORIGIN=https://your-frontend-domain.vercel.app
+   ```
+
+   To generate a secure JWT_SECRET:
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
+
+6. **Deploy**:
+   - Railway auto-deploys when you push to main
+   - Monitor deployment in Railway dashboard
+   - Get your API URL from the Environment tab (format: `https://your-service.railway.app`)
+
+7. **Verify Deployment**:
+   ```bash
+   # Check API is running
+   curl https://your-service.railway.app/api-docs
+
+   # Should return Swagger documentation
+   ```
+
+### Frontend Deployment (Vercel)
+
+1. **Prerequisites**:
+   - Push your code to GitHub
+   - Vercel account at [vercel.com](https://vercel.com)
+
+2. **Deploy to Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Select `taskflow` repository
+   - Configure:
+     - **Framework**: Vite
+     - **Root directory**: `frontend`
+
+3. **Environment Variables**:
+   ```env
+   VITE_API_URL=https://your-backend-railway-url/api
+   ```
+
+4. **Deploy**:
+   - Vercel auto-deploys on push to main
+   - Get your frontend URL from Vercel dashboard
+
+### Production Checklist
+
+- [ ] Backend environment variables properly set
+- [ ] Database migrations run successfully on Railway
+- [ ] CORS_ORIGIN points to your frontend URL
+- [ ] JWT_SECRET is secure (32+ character random string)
+- [ ] Frontend VITE_API_URL points to Railway backend
+- [ ] Test login flow works in production
+- [ ] Database backups enabled in Railway
+- [ ] SSL/HTTPS enabled (automatic with Vercel and Railway)
    PORT=5000
    ```
 
