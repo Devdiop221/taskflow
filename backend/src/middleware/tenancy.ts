@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
-import { TenantRequest } from "../types";
-import { prisma } from "../lib/prisma";
+import { TenantRequest } from "@/types";
+import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 
 /**

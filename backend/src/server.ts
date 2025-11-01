@@ -15,7 +15,7 @@ import taskRoutes from "./routes/task.route";
 // Import middleware and types
 import { authenticate } from "./middleware/auth";
 import { AuthRequest } from "./types";
-import { prisma } from "./lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 // Load environment variables
 dotenv.config();

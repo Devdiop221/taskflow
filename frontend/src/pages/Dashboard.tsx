@@ -8,6 +8,7 @@ import Layout from '../components/layout/Layout';
 import api from '../lib/api';
 import type {ApiResponse, Organization, Project} from '../types';
 import { Building2, FolderKanban, Users, Plus, ArrowRight } from 'lucide-react';
+import { Skeleton } from '../components/ui/skeleton';
 import { Link } from 'react-router-dom';
 
 /**
@@ -60,8 +61,20 @@ export default function Dashboard() {
     if (isLoadingOrgs) {
         return (
             <Layout>
-                <div className="flex items-center justify-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
+                <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <Skeleton className="h-8 w-48" />
+                            <Skeleton className="mt-2 h-4 w-32" />
+                        </div>
+                        <Skeleton className="h-10 w-32" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <Skeleton className="h-28 rounded-xl" />
+                        <Skeleton className="h-28 rounded-xl" />
+                        <Skeleton className="h-28 rounded-xl" />
+                    </div>
+                    <Skeleton className="h-64 rounded-xl" />
                 </div>
             </Layout>
         );
@@ -170,7 +183,7 @@ export default function Dashboard() {
                     <CardHeader>
                         <div className="flex justify-between items-center">
                             <CardTitle>Recent Projects</CardTitle>
-                            <Link to="/projects" className="text-sm text-indigo-600 hover:text-indigo-500">
+                            <Link to={currentOrganization ? `/organizations/${currentOrganization.id}/projects` : '/dashboard'} className="text-sm text-indigo-600 hover:text-indigo-500">
                                 View all
                             </Link>
                         </div>

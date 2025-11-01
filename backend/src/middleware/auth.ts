@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { AuthRequest, JWTPayload } from "../types";
-import { prisma } from "../lib/prisma";
+import { AuthRequest, JWTPayload } from "@/types";
+import { prisma } from "@/lib/prisma";
 
 /**
  * Middleware to authenticate requests using JWT

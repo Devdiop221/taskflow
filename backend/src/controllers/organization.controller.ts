@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { z } from "zod";
-import { prisma } from "../lib/prisma";
-import { AuthRequest, TenantRequest } from "../types";
+import { prisma } from "@/lib/prisma";
+import { AuthRequest, TenantRequest } from "@/types";
 import { Role } from "@prisma/client";
 
 // Validation schemas
@@ -139,7 +139,7 @@ export const getUserOrganizations = async (req: AuthRequest, res: Response) => {
     });
 
     // Format response with user's role
-    const formattedOrgs = organizations.map((org) => ({
+    const formattedOrgs = organizations.map((org:any) => ({
       id: org.id,
       name: org.name,
       slug: org.slug,
