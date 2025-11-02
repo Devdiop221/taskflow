@@ -16,7 +16,7 @@ if (!fs.existsSync(docsDir)) {
 // Write the spec to file
 fs.writeFileSync(outputPath, JSON.stringify(swaggerSpec, null, 2));
 
-console.log("✅ Documentation OpenAPI générée dans:", outputPath);
+console.log("✅ OpenAPI documentation generated at:", outputPath);
 console.log(
-  "📖 Pour voir la documentation interactive, démarrez le serveur et allez sur http://localhost:5000/api-docs"
+  "📖 To view the interactive documentation, start the server and go to http://localhost:5000/api-docs"
 );

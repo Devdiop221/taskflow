@@ -1,6 +1,5 @@
 # TaskFlow - Multi-Tenant Project Management Application
 
-![TaskFlow Banner](https://via.placeholder.com/1200x300/4F46E5/ffffff?text=TaskFlow+Multi-Tenant+Project+Management)
 
 **TaskFlow** is a professional-grade, multi-tenant project management application built with modern web technologies. It enables teams to manage projects and tasks within isolated organizational workspaces, similar to GitHub's organization model.
 
@@ -8,23 +7,21 @@
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Features](#-features)
 - [Technology Stack](#-technology-stack)
 - [Architecture](#-architecture)
 - [Multi-Tenancy Implementation](#-multi-tenancy-implementation)
 - [Getting Started](#-getting-started)
-- [Docker Setup](#-docker-setup)
 - [Deployment](#-deployment)
 - [API Documentation](#-api-documentation)
-- [Testing](#-testing)
 - [Project Structure](#-project-structure)
 - [Contributing](#-contributing)
 
 ---
 
-## ✨ Features
+##  Features
 
 ### Core Features
 - **Multi-Tenant Architecture**: Complete data isolation per organization
@@ -46,7 +43,7 @@
 
 ---
 
-## 🛠 Technology Stack
+##  Technology Stack
 
 ### Frontend
 
@@ -95,7 +92,7 @@
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ### System Architecture
 
@@ -151,7 +148,7 @@ User ──────┬────────── OrganizationMember ─�
 
 ---
 
-## 🔐 Multi-Tenancy Implementation
+##  Multi-Tenancy Implementation
 
 TaskFlow implements **shared database, shared schema** multi-tenancy with **discriminator-based isolation**.
 
@@ -200,7 +197,7 @@ const task = await prisma.task.create({
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -229,7 +226,7 @@ Create `.env` file in the `backend` directory:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/taskflow"
-PORT=5000
+PORT=8000
 NODE_ENV=development
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
 JWT_EXPIRES_IN="7d"
@@ -265,8 +262,8 @@ yarn build
 yarn start
 ```
 
-Backend API runs on `http://localhost:5000`
-Swagger documentation available at `http://localhost:5000/api-docs`
+Backend API runs on `https://taskflow-production-7cfa.up.railway.app`
+Swagger documentation available at `https://taskflow-production-7cfa.up.railway.app/api-docs`
 
 #### 3. Frontend Setup
 
@@ -278,7 +275,7 @@ yarn install  # or npm install
 Create `.env` file in the `frontend` directory:
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=https://taskflow-production-7cfa.up.railway.app/api
 ```
 
 Start development server:
@@ -287,7 +284,7 @@ Start development server:
 yarn dev
 ```
 
-Frontend runs on `http://localhost:5173`
+Frontend runs on `https://taskflow-ten-kohl.vercel.app`
 
 #### 4. Quick Start Script
 
@@ -304,7 +301,7 @@ Or use the individual terminals:
 **Terminal 1 - Backend:**
 ```bash
 cd backend
-yarn dev  # Runs on http://localhost:5000
+yarn dev  # Runs on http://localhost:8000
 ```
 
 **Terminal 2 - Frontend:**
@@ -329,8 +326,8 @@ Role: Organization Member
 
 #### 6. Verify Setup
 
-1. **Backend Health Check**: Visit `http://localhost:5000/api-docs` - you should see Swagger API documentation
-2. **Frontend Launch**: Visit `http://localhost:5173` - you should see the TaskFlow login page
+1. **Backend Health Check**: Visit `https://taskflow-production-7cfa.up.railway.app/api-docs` - you should see Swagger API documentation and Postman collection
+2. **Frontend Launch**: Visit `https://taskflow-ten-kohl.vercel.app` - you should see the TaskFlow login page
 3. **Test Registration**: Click "S'inscrire" to register a new account
 4. **Create Organization**: After login, create your first organization
 5. **Create Project**: Add a project and start creating tasks!
@@ -375,15 +372,7 @@ yarn dev --debug      # Run with debug logging
 
 ---
 
-## � Docker Setup
 
-### Quick Start with Docker Compose
-
-The easiest way to run TaskFlow locally is using Docker and Docker Compose. Everything is containerized and ready to go!
-
-#### Prerequisites
-- Docker and Docker Compose installed ([Install Docker](https://docs.docker.com/get-docker/))
-- 4GB RAM minimum recommended
 
 #### Start the Application
 
@@ -395,18 +384,14 @@ cd taskflow
 # Copy environment variables (optional, defaults provided)
 cp .env.example .env
 
-# Build and start services
-docker-compose up --build
 
-# First time setup: run migrations
-docker-compose exec backend yarn prisma:migrate
-docker-compose exec backend yarn db:seed
 ```
 
 The application will be available at:
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
-- **API Documentation**: http://localhost:5000/api-docs
+- **Frontend**: https://taskflow-ten-kohl.vercel.app
+- **Backend API**: https://taskflow-production-7cfa.up.railway.app
+- **API Documentation**: https://taskflow-production-7cfa.up.railway.app/api-docs
+- **Postman Collection**: [TaskFlow API.postman_collection.json](backend/docs/TaskFlow%20API.postman_collection.json)
 - **Database**: postgresql://taskflow:taskflow_dev@localhost:5432/taskflow
 
 #### Using Makefile Commands
@@ -440,26 +425,8 @@ make shell-db
 make clean
 ```
 
-#### Docker Services
 
-The `docker-compose.yml` includes three main services:
 
-1. **PostgreSQL Database** (`taskflow-postgres`)
-   - Port: 5432
-   - Auto-creates database and user
-   - Data persists in `postgres_data` volume
-
-2. **Backend API** (`taskflow-backend`)
-   - Node.js 20 Alpine with Express
-   - Port: 5000
-   - Hot-reload enabled for development
-   - Health checks configured
-
-3. **Frontend** (`taskflow-frontend`)
-   - Nginx Alpine serving React SPA
-   - Port: 3000
-   - Automatic SPA routing configured
-   - Gzip compression enabled
 
 #### Environment Configuration
 
@@ -480,27 +447,6 @@ JWT_EXPIRES_IN=7d
 VITE_API_URL=http://localhost:5000/api
 ```
 
-#### Troubleshooting Docker
-
-```bash
-# View logs
-docker-compose logs -f backend
-
-# Access container shell
-docker-compose exec backend sh
-
-# Restart a service
-docker-compose restart backend
-
-# Remove and recreate containers
-docker-compose down -v
-docker-compose up --build
-
-# Check service health
-docker-compose ps
-```
-
-For detailed Docker documentation, see [DOCKER.md](./DOCKER.md)
 
 ---
 
@@ -604,18 +550,7 @@ For detailed Docker documentation, see [DOCKER.md](./DOCKER.md)
    - Vercel auto-deploys on push to main
    - Get your frontend URL from Vercel dashboard
 
-### Production Checklist
 
-- [ ] Backend environment variables properly set
-- [ ] Database migrations run successfully on Railway
-- [ ] CORS_ORIGIN points to your frontend URL
-- [ ] JWT_SECRET is secure (32+ character random string)
-- [ ] Frontend VITE_API_URL points to Railway backend
-- [ ] Test login flow works in production
-- [ ] Database backups enabled in Railway
-- [ ] SSL/HTTPS enabled (automatic with Vercel and Railway)
-   PORT=5000
-   ```
 
 6. **Run Migrations**:
    ```bash
