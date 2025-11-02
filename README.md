@@ -672,21 +672,6 @@ curl -X POST https://taskflow-api.railway.app/api/organizations/:orgId/projects 
 
 ---
 
-## 🧪 Testing
-
-### Run Tests
-
-```bash
-# Backend
-cd backend
-npm test
-
-# Frontend
-cd frontend
-npm test
-```
-
-
 
 
 ---
