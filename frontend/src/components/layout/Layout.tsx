@@ -1,4 +1,4 @@
-import {type ReactNode, useState } from 'react';
+import {type ReactNode, useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { useOrganizationStore } from '../../store/organizationStore';
@@ -13,10 +13,13 @@ import {
     ChevronDown,
     Plus,
     Search,
+    ArrowRight,
 } from 'lucide-react';
 import { cn, getInitials } from '../../lib/utils';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '../../components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
+import api from '../../lib/api';
+import type { ApiResponse, Project } from '../../types';
 
 interface LayoutProps {
     children: ReactNode;
@@ -30,8 +33,46 @@ export default function Layout({ children }: LayoutProps) {
     const { user, logout } = useAuthStore();
     const { currentOrganization, organizations, setCurrentOrganization } = useOrganizationStore();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [isOrgDropdownOpen, setIsOrgDropdownOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<Project[]>([]);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const location = useLocation();
+
+    // Search projects and tasks
+    useEffect(() => {
+        if (!searchQuery.trim() || !currentOrganization) {
+            setSearchResults([]);
+            return;
+        }
+
+        const performSearch = async () => {
+            try {
+                const response = await api.get<ApiResponse<Project[]>>(
+                    `/organizations/${currentOrganization.id}/projects`
+                );
+                if (response.data.success) {
+                    const projects = response.data.data || [];
+                    const filtered = projects.filter(p =>
+                        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()))
+                    );
+                    setSearchResults(filtered.slice(0, 5)); // Limit to 5 results
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                setSearchResults([]);
+            }
+        };
+
+        performSearch();
+    }, [searchQuery, currentOrganization]);
+
+    const handleSelectResult = (project: Project) => {
+        navigate(`/organizations/${currentOrganization!.id}/projects/${project.id}`);
+        setSearchQuery('');
+        setSearchResults([]);
+        setIsSearchOpen(false);
+    };
 
     const handleLogout = () => {
         logout();
@@ -79,9 +120,49 @@ export default function Layout({ children }: LayoutProps) {
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                 <input
                                     type="text"
-                                    placeholder="Search"
+                                    placeholder="Search projects..."
+                                    value={searchQuery}
+                                    onChange={(e) => {
+                                        setSearchQuery(e.target.value);
+                                        setIsSearchOpen(true);
+                                    }}
+                                    onFocus={() => setIsSearchOpen(true)}
                                     className="w-full h-10 pl-10 pr-3 rounded-full border border-border/70 bg-white shadow-sm focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary/60 placeholder:text-gray-400"
                                 />
+                                {/* Search Results Dropdown */}
+                                {isSearchOpen && (searchQuery.trim() || searchResults.length > 0) && (
+                                    <>
+                                        <div
+                                            className="fixed inset-0 z-40"
+                                            onClick={() => setIsSearchOpen(false)}
+                                        />
+                                        <div className="absolute top-full mt-2 w-full bg-white rounded-lg border border-gray-200 shadow-lg z-50 max-h-96 overflow-y-auto">
+                                            {searchResults.length > 0 ? (
+                                                <div className="space-y-1 p-2">
+                                                    {searchResults.map((project) => (
+                                                        <button
+                                                            key={project.id}
+                                                            onClick={() => handleSelectResult(project)}
+                                                            className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-between group"
+                                                        >
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-sm font-medium text-gray-900 truncate">{project.name}</p>
+                                                                {project.description && (
+                                                                    <p className="text-xs text-gray-500 truncate">{project.description}</p>
+                                                                )}
+                                                            </div>
+                                                            <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-gray-600 shrink-0 ml-2" />
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            ) : searchQuery.trim() ? (
+                                                <div className="p-4 text-center">
+                                                    <p className="text-sm text-gray-500">No projects found</p>
+                                                </div>
+                                            ) : null}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
