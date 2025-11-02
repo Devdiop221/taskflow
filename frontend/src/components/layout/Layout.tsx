@@ -83,7 +83,6 @@ export default function Layout({ children }: LayoutProps) {
         const org = organizations.find((o) => o.id === orgId);
         if (org) {
             setCurrentOrganization(org);
-            setIsOrgDropdownOpen(false);
             navigate('/dashboard');
         }
     };
