@@ -201,7 +201,7 @@ export default function Dashboard() {
                                     Get started by creating a new project.
                                 </p>
                                 <div className="mt-6">
-                                    <Button onClick={() => navigate('/projects/new')}>
+                                    <Button onClick={() => currentOrganization && navigate(`/organizations/${currentOrganization.id}/projects/new`)}>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Create Project
                                     </Button>
@@ -212,7 +212,7 @@ export default function Dashboard() {
                                 {projects.slice(0, 5).map((project) => (
                                     <Link
                                         key={project.id}
-                                        to={`/projects/${project.id}`}
+                                        to={`/organizations/${currentOrganization.id}/projects/${project.id}`}
                                         className="block p-4 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-colors"
                                     >
                                         <div className="flex items-center justify-between">
