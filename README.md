@@ -450,7 +450,7 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-## �📦 Deployment
+##  Deployment
 
 ### Frontend Deployment (Vercel)
 
@@ -577,7 +577,7 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-## 📚 API Documentation
+##  API Documentation
 
 ### Base URL
 
@@ -691,7 +691,7 @@ npm test
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 taskflow/
@@ -736,7 +736,7 @@ taskflow/
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 We welcome contributions! Please follow these steps:
 
@@ -756,19 +756,19 @@ We welcome contributions! Please follow these steps:
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License.
 
 ---
 
-## 👥 Authors
+##  Authors
 
 - **Mouhamed Diop**
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Inspired by GitHub's organization model
 - Built with modern React and Node.js best practices
@@ -776,7 +776,7 @@ This project is licensed under the MIT License.
 
 ---
 
-## 📧 Contact
+##  Contact
 
 For questions or support:
 - Email: contact@taskflow.app
